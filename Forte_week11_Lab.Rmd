@@ -1,0 +1,87 @@
+---
+title: "Week 11: Lab - Build Your Own Shiny App"
+author: 'Jonathan Forte'
+date: '3/30/23'
+output: html_document
+---
+
+---
+
+# Instructions
+Create a scatter plot interactive application. In this application, use the 
+census data from earlier in the book, and let the user determine the X-axis, 
+the Y-axis, the color (optional), and the size based on what the user would 
+like to see. To do this, you will need multiple-choice menus, one for each 
+selection the user needs to make. You can do this by following the direction 
+written in the text book. Enjoy. 
+
+**For your information:**   
+The data is available through this link: 
+
+* http://www2.census.gov/programs-surveys/popest/tables/2010-2011/state/totals/nst-est2011-01.csv
+
+
+Add all of your libraries that you use for this assignment here.
+```{r setup}
+# Add your library below.
+library(shiny)
+library(ggplot2)
+library(rsconnect)
+```
+
+---
+
+# Step 1 - Build the UI
+Build the UI below.
+
+```{r, "Step 1"}
+census <- read.csv("data/cleanedCensus.csv")
+
+ui <- fluidPage(
+  # Write your code here.
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(
+        inputId = "y", label = "Y-axis:", 
+        choices = c("april10census", "april10base", "july10pop", "july11pop"),
+        selected = "april10census"
+      ),
+      selectInput(
+        inputId = "x", label = "X-axis:",
+        choices = c("april10census", "april10base", "july10pop", "july11pop"),
+        selected = "april10base"
+      ),
+      selectInput(
+        inputId = "z", label = "Color and Size by:",
+        choices = c("april10census", "april10base", "july10pop", "july11pop"),
+        selected = "july10pop"
+      )
+      ),
+   mainPanel(
+        plotOutput(outputId = "scatterplot")
+  )
+)
+)
+```
+
+---
+
+# Step 2 - Build the Server
+Build the Server below.
+```{r, "Step 2"}
+server <- function(input, output) {
+ # Write your code here.
+  output$scatterplot <- renderPlot({
+    ggplot(data = census, aes_string(x = input$x, y = input$y, color = input$z, size = input$z)) + geom_point()
+  })
+}
+```
+
+---
+
+# Step 3 - Create the Shiny App
+Deploy the shiny app.
+```{r, "Step 3"}
+# Write your code here.
+shinyApp(ui = ui, server = server)
+```
