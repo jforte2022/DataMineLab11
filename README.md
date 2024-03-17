@@ -1,5 +1,5 @@
 # DataMineLab11
-Data Mining Lab 5: Data Mined Flight Data Word Cloud
+Data Mining Lab 11: Census Data Shiny Application
 
 Please use:
 
